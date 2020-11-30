@@ -1,0 +1,138 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package dsassignment3;
+
+import java.util.ArrayList;
+
+/**
+ *
+ * @author jnana
+ */
+public class WorkAheadQueue<T> implements WorkAheadQueueADT<T>{
+    
+   protected LinearNode<T> front;
+   protected LinearNode<T> back;
+   protected ArrayList<LinearNode<T>> frontThreeNodes;
+   protected ArrayList<T> frontThreeElements;
+   protected int numNodes;
+    
+    @Override
+    public T dequeue(int x) throws EmptyCollectionException, InvalidArgumentException {
+        if (front != null) {
+           int index = 0;
+           LinearNode<T> temp = front;
+           while (index < 3 && temp != null) {
+               temp = front.getNext();
+               index++;
+           }
+           if (temp != null) {
+               numNodes--;
+               LinearNode<T> tempPrev = temp.getPrev();
+               tempPrev.setNext(temp.getNext());
+               return temp.getElement();
+           }
+       }
+         //To change body of generated methods, choose Tools | Templates.
+       return null;
+    }
+
+    @Override
+    public T first(int x) throws EmptyCollectionException, InvalidArgumentException {
+        if (front != null) {
+           int index = 0;
+           LinearNode<T> temp = front;
+           while (index < 3 && temp != null) {
+               temp = front.getNext();
+               index++;
+           }
+           return temp.getElement();
+       }
+       return null;
+    }
+
+    @Override
+    public ArrayList<LinearNode<T>> firstThreeNodes() throws EmptyCollectionException {
+       frontThreeNodes = new ArrayList<>();
+       if (front != null) {
+           int index = 0;
+           LinearNode<T> temp = front;
+           while (index < 3 && temp != null) {
+               frontThreeNodes.add(temp);
+               temp = temp.getNext();
+               index++;
+           }
+       }
+       return frontThreeNodes;
+    }
+
+    @Override
+    public ArrayList<T> firstThreeElements() throws EmptyCollectionException {
+       frontThreeElements = new ArrayList<>();
+       if (front != null) {
+           int index = 0;
+           LinearNode<T> temp = front;
+           while (index < 3 && temp != null) {
+               frontThreeElements.add(temp.getElement());
+               temp = temp.getNext();
+               index++;
+           }
+       }
+       return frontThreeElements;
+    }
+
+    @Override
+    public void enqueue(T element) {
+         if (front == null) {
+           front = new LinearNode<T>(element);
+           front.setNext(back);
+           numNodes = 1;
+       } else {
+           LinearNode<T> temp = new LinearNode<T>(element);
+           if (back != null) {
+               back.setNext(temp);
+               temp.setPrev(back);
+               back = temp;
+           } else {
+               back = temp;
+               front.setNext(back);
+               back.setPrev(front);
+           }
+           numNodes++;
+       }
+    }
+
+    @Override
+    public T dequeue() throws EmptyCollectionException {
+        if (front != null) {
+           LinearNode<T> temp = front;
+           front = front.getNext();
+           numNodes--;
+           return temp.getElement();
+       }
+       return null;
+    }
+
+    @Override
+    public T first() throws EmptyCollectionException {
+        if (front != null) {
+           return front.getElement();
+       }
+       return null;
+    }
+
+    @Override
+    public boolean isEmpty() {
+               return numNodes == 0;
+
+    }
+
+    @Override
+    public int size() {
+           return numNodes;
+
+    }
+    
+}
